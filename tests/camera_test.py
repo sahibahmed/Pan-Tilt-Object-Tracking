@@ -42,17 +42,20 @@ contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX
 print("Number of contours found = " + str(len(contours)))
 
 #drawing boundary round the contours found (red color bounds)
-cv2.drawContours(array, contours, -1, (0, 0, 255), 3)
+#cv2.drawContours(array, contours, -1, (0, 0, 255), 3)
 
+if len(contours) > 0: #conditional statemnet to prevent false boundaries
+    largest_contour = max(contours, key=cv2.contourArea)  # select the biggest contour
+    x, y, w, h = cv2.boundingRect(largest_contour) #calculate the four corners of the rectangle
+    cv2.rectangle(array, (x, y), (x+w, y+h), (0, 0, 255), 4) # draw RED ractangle using the four coordinates
 
+    # determine the center of bounding rectangle
+    contour_center_x = int(x+w/2)
+    contour_center_y = int(y+h/2)
 
+    #draw the center in RED
+    cv2.circle(array, (contour_center_x, contour_center_y), 4, (0,0,255), -1)
 
-
-
-"""
-print(type(array))
-print(array.shape) # printed results : (480, 640, 4) 
-"""
 
 height = array.shape[0] # 480 height 
 width = array.shape[1] # 640 width
@@ -60,13 +63,7 @@ width = array.shape[1] # 640 width
 center_x = int(width/2) 
 center_y = int(height/2)
 
-"""
-print(center_x)
-print(center_y)
-"""
-
-cv2.circle(array, (center_x, center_y), 4, (0,0,255), -1)
-
+cv2.circle(array, (center_x, center_y), 4, (0,255,0), -1) #frame center in BLUE
 
 cv2.imwrite("camera_frame.jpg", array) #create image file to view the captured image
 
