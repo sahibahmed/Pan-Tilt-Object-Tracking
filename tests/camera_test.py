@@ -34,7 +34,18 @@ upper_limit = np.array([130, 255, 255])
 
 mask = cv2.inRange(array, lower_limit, upper_limit) #defined range for blue 
 
-array = cv2.bitwise_and(array, array, mask=mask) #only 
+array = cv2.bitwise_and(array, array, mask=mask) #only the color blue is highlighted
+
+#finding all blue objects on frame using contours
+contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+print("Number of contours found = " + str(len(contours)))
+
+#drawing boundary round the contours found (red color bounds)
+cv2.drawContours(array, contours, -1, (0, 0, 255), 3)
+
+
+
 
 
 
