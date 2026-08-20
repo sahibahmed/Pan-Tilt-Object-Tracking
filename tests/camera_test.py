@@ -24,10 +24,24 @@ picam2.start() #avoiding using showpreview=True as I am using SSH
 time.sleep(1)
 array = picam2.capture_array("main") #capture in preview mode and store to array
 
-print(type(array))
-print(array.shape) 
+array = cv2.cvtColor(array, cv2.COLOR_RGBA2BGR) #conviret Picamera2 RGB to OpenCV BGR
 
-picam2.capture_file("camera_frame.jpg") #create image file to view the captured image
+print(type(array))
+print(array.shape) # printed results : (480, 640, 4) 
+
+height = array.shape[0] # 480 height 
+width = array.shape[1] # 640 width
+
+center_x = int(width/2) 
+center_y = int(height/2)
+
+print(center_x)
+print(center_y)
+
+cv2.circle(array, (center_x, center_y), 4, (0,0,255), -1)
+
+
+cv2.imwrite("camera_frame.jpg", array) #create image file to view the captured image
 
 picam2.stop()
 
