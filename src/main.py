@@ -73,19 +73,36 @@ while True:
         #draw the center in RED
         cv2.circle(array, (object_center_x, object_center_y), 4, (0,0,255), -1)
 
-
+        
         #identify how far off object center is from frame center
         horizontal_error = (object_center_x - center_x)
+        dead_zone_x = 15
 
-        if horizontal_error < 5:
-            pan_angle += 3; 
-        elif horizontal_error > 5:
-            pan_angle -= 3; 
+        if horizontal_error < -dead_zone_x:
+            pan_angle += 3
+        elif horizontal_error > dead_zone_x:
+            pan_angle -= 3
         else: 
             print("Object is centered!")
 
         pan_angle = max(0, min(180, pan_angle)) #servo constraint
         kit.servo[0].angle = pan_angle
+        
+
+        vertical_error = (object_center_y - center_y)
+        dead_zone_y = 15
+        
+        if vertical_error < -dead_zone_y:
+            tilt_angle -= 3
+        elif vertical_error > dead_zone_y:
+            tilt_angle += 3
+        else:
+            print("Object is centered!")
+
+
+        tilt_angle = max(0, min(180, tilt_angle))
+        kit.servo[1].angle = tilt_angle
+
 
 
 
